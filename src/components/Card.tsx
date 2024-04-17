@@ -6,6 +6,7 @@ import { SlOptions } from "react-icons/sl"
 //import { Tooltip } from 'flowbite' 
 
 
+
 export default function Card({ detail, deleteCard, canDelete = true }: { detail: any, deleteCard: () => void, canDelete: boolean }) {
     const [fileUrl, setFileUrl] = useState('')
 
@@ -13,7 +14,7 @@ export default function Card({ detail, deleteCard, canDelete = true }: { detail:
     const open = Boolean(anchorEl);
     const [openSnackbar, setOpenSnackbar] = useState(false)
 
-    function handleCloseSnackbar(){
+    function handleCloseSnackbar() {
         setOpenSnackbar(false)
     }
 
@@ -70,12 +71,12 @@ export default function Card({ detail, deleteCard, canDelete = true }: { detail:
     const bgColor = detail.cardColor
 
     return (
-        <div style={{ backgroundColor: bgColor ? bgColor : "rgb(63 63 70)", filter: "brightness(1.2)" }} className={`max-w-lg p-6 rounded mt-5 relative h-64 overflow-y-auto shadow card group transition hover:translate-y-1`}>
+        <div style={{ border: bgColor ? `3px solid ${bgColor}` : "3px solid rgb(63 63 70)", color: bgColor ? bgColor : "rgb(63 63 70)" }} className={`max-w-lg p-6 rounded-md mt-5 relative h-64 overflow-y-auto shadow card group transition hover:translate-y-1 bg-white bg-opacity-90`}>
             {canDelete ? (
                 <>
                     <Tooltip title='options' arrow placement="top">
-                        <div className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-white hover:bg-opacity-30 transition absolute right-3 top-3 cursor-pointer" onClick={handleClick}>
-                            <SlOptions className=" text-white opacity-90" />
+                        <div className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-black hover:bg-opacity-10 transition absolute right-3 top-3 cursor-pointer" onClick={handleClick}>
+                            <SlOptions className="opacity-90" style={{ color: bgColor ? bgColor : "rgb(63 63 70)" }} />
                         </div>
                     </Tooltip>
                     <Menu
@@ -92,7 +93,7 @@ export default function Card({ detail, deleteCard, canDelete = true }: { detail:
                         }}
                         sx={{
                             "& .MuiPaper-root": {
-                                marginLeft: "-2.5rem",
+                                marginLeft: "-2rem",
                                 backgroundColor: bgColor ? bgColor : "rgb(63 63 70)",
                                 filter: "grayscale(0.3)",
                                 "& .MuiButtonBase-root": {
@@ -107,13 +108,21 @@ export default function Card({ detail, deleteCard, canDelete = true }: { detail:
                     </Menu>
                 </>
             ) : null}
-            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{detail.title}</h5>
-            <p className="mb-3 font-normal text-white">{detail.description}</p>
-            <FileComponent doc={fileUrl} />
+            <h5 className="mb-2 text-2xl font-bold tracking-tight" style={{ color: bgColor ? bgColor : "rgb(63 63 70)" }}>{detail.title}</h5>
+            {/*<p className="mb-3 font-normal" style={{color: bgColor ? bgColor : "rgb(63 63 70)"}}>{detail.description}</p>*/}
+            <div
+                dangerouslySetInnerHTML={{ __html: detail.description }}
+                style={{ width: "100%", marginBottom: "0.75rem" }}
+            />
+            {
+                detail.file ? (
+                    <FileComponent doc={fileUrl} color={bgColor} />
+                ) : null
+            }
             {
                 detail.canvasImg ? (
                     <div className='bg-white bg-opacity-80 w-full h-300 rounded mt-8'>
-                        <img src={detail.canvasImg} className='shadow' />
+                        <img src={detail.canvasImg} className='shadow rounded' style={{ border: bgColor ? `3px solid ${bgColor}` : "3px solid rgb(63 63 70)" }} />
                     </div>
                 ) : null
             }

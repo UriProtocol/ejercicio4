@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Document, Page } from 'react-pdf'
 import { IoArrowForward, IoArrowBack } from 'react-icons/io5'
 
-export default function FileComponent({ doc, docName = 'file', download }: { doc: string, docName?: string, download?: boolean }) {
+export default function FileComponent({ doc, docName = 'file', download, color }: { doc: string, docName?: string, download?: boolean, color: string }) {
 
     const [numPages, setNumPages] = useState<number>(1);
     const [pageNumber, setPageNumber] = useState<number>(1);
@@ -24,6 +24,8 @@ export default function FileComponent({ doc, docName = 'file', download }: { doc
                 return 'image';
             }
         }
+
+        console.log(url)
 
         return 'unknown';
     };
@@ -53,7 +55,6 @@ export default function FileComponent({ doc, docName = 'file', download }: { doc
 
     const fileType = getFileType(doc);
 
-    console.log(fileType)
 
     return (
         <div className="flex">
@@ -93,8 +94,8 @@ export default function FileComponent({ doc, docName = 'file', download }: { doc
                 <iframe src={doc}></iframe>
             )}
 
-            {fileType === "image" || fileType == 'unknown' && (
-                <div className='w-full bg-[#00000040]' style={{boxShadow: "-3rem 0 0 #00000040, 3rem 0 0 #00000040"}}>
+            {doc && fileType === "image" || fileType == 'unknown' && (
+                <div className='w-full rounded py-4' style={{backgroundColor: color ? color : "rgb(63,63,60)"}}>
                     <img className='max-h-32 mx-auto shadow rounded' src={doc} />
                 </div>
             )}

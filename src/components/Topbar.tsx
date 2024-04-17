@@ -22,10 +22,10 @@ export default function Topbar() {
     };
 
     return (
-        <nav className="pt-6 z-50 w-full">
+        <nav className="py-3 z-50 ml-auto w-[calc(100%-16rem)]  bg-[#0A0A0A] bg-opacity-80 shadow-md">
             <div className="px-3 py-3 lg:px-5 lg:pl-3">
                 <div className="flex items-center justify-between">
-                    <div className="flex items-center justify-start rtl:justify-end ml-64">
+                    <div className="flex items-center justify-start rtl:justify-end">
                         <a className="flex ms-2 md:me-24 items-center gap-3">
                             <span className="self-center text-lg whitespace-nowrap dark:text-white ml-2">Murales</span>
                         </a>

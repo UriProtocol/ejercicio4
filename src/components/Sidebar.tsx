@@ -10,6 +10,7 @@ export default function Sidebar() {
     const fetchSpaces = useAuthStore(state => state.fetchSpaces);
     const spaces = useAuthStore(state => state.spaces);
     const setBgColor = useAuthStore(state => state.setBgColor)
+    const bgColor = useAuthStore(state => state.bgColor)
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [currId, setCurrId] = useState("")
@@ -55,16 +56,18 @@ export default function Sidebar() {
 
 
     return (
-        <aside id="logo-sidebar" className="fixed top-0 left-0 py-3 px-1.5 z-40 w-64 h-screen transition-transform -translate-x-ful sm:translate-x-0 bg-black bg-opacity-50" aria-label="Sidebar">
-            <button className=" mt-5 w-40 mx-auto text-white flex justify-between items-center mb-6 px-4 py-2 rounded transition hover:bg-white hover:bg-opacity-15" onClick={() => {
-                navigate("/add-spaces")
-                setBgColor("")
+        <aside id="logo-sidebar" className="fixed top-0 left-0 pb-3 z-40 w-64 h-screen transition-transform -translate-x-ful sm:translate-x-0 bg-[#0A0A0A] bg-opacity-90 overflow-hidden shadow-md" aria-label="Sidebar">
+            <div className=' w-full py-1 transition hover:bg-[#ffffff20] mt-3.5 mb-6 hover:extended-shadow cursor-pointer' onClick={() =>{
+                    navigate("/add-spaces")
+                    setBgColor("")
             }}>
-                <IoIosAdd className=" scale-125" />
-                <p>
-                    Nuevo mural
-                </p>
-            </button>
+                <button className=" w-40 mx-auto text-white flex justify-between items-center px-4 py-2 rounded transition">
+                    <IoIosAdd className=" scale-125" />
+                    <p>
+                        Nuevo mural
+                    </p>
+                </button>
+            </div>
             <div className="px-2 pb-4 overflow-y-auto h-auto max-h-[80vh] relative">
                 <ul className="space-y-2 font-medium">
                     {spaces.map((space: any) => (

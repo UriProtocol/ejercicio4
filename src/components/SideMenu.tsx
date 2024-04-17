@@ -25,7 +25,7 @@ function SideMenu({ children }: { children: any }) {
             <Topbar />
             <Sidebar />
             
-            <main className="pt-6 pl-72 min-h-screen">
+            <main className=" pl-72 min-h-screen">
                 {children}
             </main>
         </>

@@ -15,6 +15,7 @@ import SignatureCanvas from 'react-signature-canvas'
 //@ts-ignore
 import { TwitterPicker, SliderPicker, CompactPicker } from 'react-color'
 import { IoMdMore } from "react-icons/io";
+import { Editor } from '@tinymce/tinymce-react';
 
 function SpaceDetails() {
     const { id } = useParams();
@@ -32,11 +33,11 @@ function SpaceDetails() {
     const [penColor, setPenColor] = useState("")
     const [openSnackbar, setOpenSnackbar] = useState(false)
 
+    const editorRef = useRef(null)
+
     function handleCloseSnackbar() {
         setOpenSnackbar(false)
     }
-
-
 
     function onChange(color, event) {
         setCardColor(color.hex)
@@ -85,9 +86,13 @@ function SpaceDetails() {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
+
+		//const contentMd = editorRef.current.getInstance().getMarkdown();
+        if(!contentMd) return
+
         const formData = new FormData(e.target);
         formData.append("title", title);
-        formData.append("description", description);
+        formData.append("description", "");
         if (file) {
             formData.append('file', file);
         }
@@ -145,8 +150,8 @@ function SpaceDetails() {
         setAnchorEl(null);
     };
 
-    const deleteSpace = async() => {
-        if(!space.id) return
+    const deleteSpace = async () => {
+        if (!space.id) return
         try {
             const response = await axios.delete(`http://localhost:5000/api/spaces/${space.id}`);
             console.log(response)
@@ -157,15 +162,15 @@ function SpaceDetails() {
         }
     }
 
-     const copyLinkToClipboard = async () => {
-      try {
-        const url = `http://localhost:5173/spaces/${space.id}/share`;
-        await navigator.clipboard.writeText(url);
-        setIsCopied(true);
-        alert('Link copiado al portapapeles!')
-      } catch (error) {
-        console.error('Error copying link to clipboard:', error);
-      }
+    const copyLinkToClipboard = async () => {
+        try {
+            const url = `http://localhost:5173/spaces/${space.id}/share`;
+            await navigator.clipboard.writeText(url);
+            setIsCopied(true);
+            alert('Link copiado al portapapeles!')
+        } catch (error) {
+            console.error('Error copying link to clipboard:', error);
+        }
     };
 
 
@@ -173,11 +178,13 @@ function SpaceDetails() {
 
     return (
         <>
-            <div className='flex flex-row items-center gap-5 mb-4'>
+            <div className='flex flex-row items-center gap-5 mb-4 bg-[#00000020] py-4' style={{ boxShadow: "-2rem 0 0 #00000020" }}>
                 <p className=' font-medium text-xl text-white'>
                     {space?.name}
                 </p>
-                <IoMdMore className=' text-white scale-150 text-opacity-40 transition hover:text-opacity-80 cursor-pointer' onClick={handleClick}/>
+                <div className=' bg-white transition bg-opacity-0 hover:bg-opacity-15 px-1 py-1.5 rounded'>
+                    <IoMdMore className=' text-white scale-150 text-opacity-70 cursor-pointer' onClick={handleClick} />
+                </div>
                 <Menu
                     id="basic-menu"
                     anchorEl={anchorEl}
@@ -207,7 +214,7 @@ function SpaceDetails() {
                 </Menu>
             </div>
             <div className='flex flex-row items-center gap-5'>
-                <button onClick={() => setModalOpen(true)} className="text-white py-2 px-4 bg-white bg-opacity-25 hover:bg-opacity-35 transition rounded-md flex gap-3 items-center text-sm">
+                <button onClick={() => setModalOpen(true)} className="text-white py-2 px-4 bg-white bg-opacity-25 hover:bg-opacity-35 transition rounded-md flex gap-3 items-center text-sm shadow">
                     <IoIosAdd className="" />
                     <p>
                         Agregar tarjeta
@@ -235,7 +242,28 @@ function SpaceDetails() {
                     </div>
                     <div className="mb-4">
                         <label htmlFor="description" className="block mb-2 text-sm font-medium text-white">Descripcion</label>
-                        <textarea id="description" rows={4} value={description} onChange={(e) => setDescription(e.target.value)} className="border w-full bg-white bg-opacity-15 rounded border-none py-2 px-4 text-white focus:outline-none text-sm resize-none" required />
+                        {/*<textarea id="description" rows={4} value={description} onChange={(e) => setDescription(e.target.value)} className="border w-full bg-white bg-opacity-15 rounded border-none py-2 px-4 text-white focus:outline-none text-sm resize-none" required />*/}
+                        <Editor
+                            //onInit={(evt, editor) => editorRef.current = editor}
+                            ref={editorRef}
+                            apiKey={"faeiq8kwgqzf3uen5l17bvqra9a36zltelk2mwbyavucxkg6"}
+                            initialValue=""
+                            init={{
+                                height: 280,
+                                resize: false,
+                                //menubar: false,
+                                plugins: [
+                                    'advlist autolink lists link image charmap print preview anchor',
+                                    'searchreplace visualblocks code fullscreen',
+                                    'insertdatetime media table paste code help wordcount'
+                                ],
+                                toolbar: 'undo redo | formatselect | styles | forecolor |' +
+                                    'bold italic backcolor | alignleft aligncenter ' +
+                                    'alignright alignjustify | bullist numlist outdent indent | ' +
+                                    'removeformat | help',
+                                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                            }}
+                        />
                     </div>
                     <div className='mb-4'>
                         <p className=' text-white font-medium'>Imagen</p>
